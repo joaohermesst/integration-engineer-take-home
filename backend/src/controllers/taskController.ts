@@ -19,6 +19,21 @@ const createTask = async (request: Request, response: Response) => {
   return response.status(201).json(newTask);
 };
 
+const updateTask = async (request: Request, response: Response) => {
+  const id = parseInt(request.params.id);
+  const { title, description } = request.body;
+  const taskIndex = tasks.findIndex((task) => task.id === id);
+
+  if (title) {
+    tasks[taskIndex].title = title;
+  }
+  if (description) {
+    tasks[taskIndex].description = description;
+  }
+
+  return response.status(200).json(tasks[taskIndex]);
+};
+
 const deleteTask = async (request: Request, response: Response) => {
   const id = parseInt(request.params.id);
   const taskIndex = tasks.findIndex((task) => task.id === id);
@@ -29,4 +44,4 @@ const deleteTask = async (request: Request, response: Response) => {
   return response.status(204).send();
 };
 
-export { getTasks, createTask, deleteTask };
+export { getTasks, createTask, deleteTask, updateTask };

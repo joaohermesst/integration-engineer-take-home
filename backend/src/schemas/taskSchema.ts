@@ -5,4 +5,9 @@ const createTaskSchema = z.object({
   description: z.string().min(1),
 });
 
-export { createTaskSchema };
+const updateTaskSchema = z.object({
+  title: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+});
+
+export { createTaskSchema, updateTaskSchema };
