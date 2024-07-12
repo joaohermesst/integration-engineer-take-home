@@ -34,7 +34,7 @@ const App: React.FC = () => {
   };
 
   const setUpdateTask = async (id: number) => {
-    const task = tasks.find((task) => task.id === parseInt(id));
+    const task = tasks.find((task) => task.id == id);
     if (task) {
       setTaskToUpdate(task);
       setUpdateFormData({ title: task.title, description: task.description });
@@ -79,7 +79,7 @@ const App: React.FC = () => {
     await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks/${id}`, {
       method: "DELETE",
     });
-    setTasks(tasks.filter((task) => task.id !== parseInt(id)));
+    setTasks(tasks.filter((task) => task.id != id));
   };
 
   return (
