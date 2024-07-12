@@ -15,15 +15,29 @@ const App: React.FC = () => {
   }, []);
 
   const fetchTasks = async () => {
-    const response = await fetch("http://localhost:8000/tasks");
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks`);
     const tasks = await response.json();
     setTasks(tasks);
   };
 
-  /* Complete the following functions to hit endpoints on your server */
-  const createTask = async () => {};
+  const createTask = async () => {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const newTask = await response.json();
+    setTasks([...tasks, newTask]);
+  };
 
-  const deleteTask = async (id: string) => {};
+  const deleteTask = async (id: string) => {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks/${id}`, {
+      method: "DELETE",
+    });
+    setTasks(tasks.filter((task) => task.id !== parseInt(id)));
+  };
 
   return (
     <div>
