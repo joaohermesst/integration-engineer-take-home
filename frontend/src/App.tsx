@@ -8,7 +8,15 @@ type Task = {
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [formData, setFormData] = useState({ title: "", description: "" });
+  const [createFormData, setCreateFormData] = useState({
+    title: "",
+    description: "",
+  });
+  const [updateFormData, setUpdateFormData] = useState({
+    title: "",
+    description: "",
+  });
+  const [taskToUpdate, setTaskToUpdate] = useState<Task | null>(null);
 
   useEffect(() => {
     fetchTasks();
@@ -20,19 +28,54 @@ const App: React.FC = () => {
     setTasks(tasks);
   };
 
+  const cleanUpdate = async () => {
+    setTaskToUpdate(null);
+    setUpdateFormData({ title: "", description: "" });
+  };
+
+  const setUpdateTask = async (id: number) => {
+    const task = tasks.find((task) => task.id === parseInt(id));
+    if (task) {
+      setTaskToUpdate(task);
+      setUpdateFormData({ title: task.title, description: task.description });
+    }
+  };
+
   const createTask = async () => {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(createFormData),
     });
     const newTask = await response.json();
     setTasks([...tasks, newTask]);
   };
 
-  const deleteTask = async (id: string) => {
+  const updateTask = async (id: number) => {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateFormData),
+    });
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return {
+          ...task,
+          ...updateFormData,
+        };
+      } else {
+        return task;
+      }
+    });
+    setTasks(updatedTasks);
+    cleanUpdate();
+  };
+
+  const deleteTask = async (id: number) => {
     await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks/${id}`, {
       method: "DELETE",
     });
@@ -48,23 +91,55 @@ const App: React.FC = () => {
             <h3>{task.title}</h3>
             <p>{task.description}</p>
             <button onClick={() => deleteTask(task.id)}>Delete</button>
+            <button onClick={() => setUpdateTask(task.id)}>Update</button>
           </li>
         ))}
       </ul>
+      {taskToUpdate && (
+        <div>
+          <h2>Update Task - {taskToUpdate.title}</h2>
+          <input
+            type="text"
+            placeholder="Title"
+            value={updateFormData.title}
+            onChange={(e) =>
+              setUpdateFormData({ ...updateFormData, title: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={updateFormData.description}
+            onChange={(e) =>
+              setUpdateFormData({
+                ...updateFormData,
+                description: e.target.value,
+              })
+            }
+          />
+          <button onClick={() => updateTask(taskToUpdate.id)}>Update</button>
+          <button onClick={cleanUpdate}>Cancel</button>
+        </div>
+      )}
       <div>
         <h2>Create Task</h2>
         <input
           type="text"
           placeholder="Title"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          value={createFormData.title}
+          onChange={(e) =>
+            setCreateFormData({ ...createFormData, title: e.target.value })
+          }
         />
         <input
           type="text"
           placeholder="Description"
-          value={formData.description}
+          value={createFormData.description}
           onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
+            setCreateFormData({
+              ...createFormData,
+              description: e.target.value,
+            })
           }
         />
         <button onClick={createTask}>Create</button>
