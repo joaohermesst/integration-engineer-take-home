@@ -98,59 +98,82 @@ const App: React.FC = () => {
           <li key={task.id}>
             <h3>{task.title}</h3>
             <p>{task.description}</p>
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
-            <button onClick={() => setUpdateTask(task.id)}>Update</button>
+            <button
+              className="delete-button"
+              onClick={() => deleteTask(task.id)}
+            >
+              Delete
+            </button>
+            <button
+              className="update-button"
+              onClick={() => setUpdateTask(task.id)}
+            >
+              Update
+            </button>
           </li>
         ))}
       </ul>
       {taskToUpdate && (
         <div>
           <h2>Update Task - {taskToUpdate.title}</h2>
+          <div className="form">
+            <input
+              type="text"
+              placeholder="Title"
+              value={updateFormData.title}
+              onChange={(e) =>
+                setUpdateFormData({ ...updateFormData, title: e.target.value })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Description"
+              value={updateFormData.description}
+              onChange={(e) =>
+                setUpdateFormData({
+                  ...updateFormData,
+                  description: e.target.value,
+                })
+              }
+            />
+          </div>
+          <button className="margin-right" onClick={cleanUpdate}>
+            Cancel
+          </button>
+          <button
+            onClick={() => updateTask(taskToUpdate.id)}
+            className="update-button"
+          >
+            Update
+          </button>
+        </div>
+      )}
+      <div>
+        <h2>Create Task</h2>
+        <div className="form">
           <input
             type="text"
             placeholder="Title"
-            value={updateFormData.title}
+            value={createFormData.title}
             onChange={(e) =>
-              setUpdateFormData({ ...updateFormData, title: e.target.value })
+              setCreateFormData({ ...createFormData, title: e.target.value })
             }
           />
           <input
             type="text"
             placeholder="Description"
-            value={updateFormData.description}
+            value={createFormData.description}
             onChange={(e) =>
-              setUpdateFormData({
-                ...updateFormData,
+              setCreateFormData({
+                ...createFormData,
                 description: e.target.value,
               })
             }
           />
-          <button onClick={() => updateTask(taskToUpdate.id)}>Update</button>
-          <button onClick={cleanUpdate}>Cancel</button>
         </div>
-      )}
-      <div>
-        <h2>Create Task</h2>
-        <input
-          type="text"
-          placeholder="Title"
-          value={createFormData.title}
-          onChange={(e) =>
-            setCreateFormData({ ...createFormData, title: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={createFormData.description}
-          onChange={(e) =>
-            setCreateFormData({
-              ...createFormData,
-              description: e.target.value,
-            })
-          }
-        />
-        <button onClick={createTask}>Create</button>
+        <button className="create-button" onClick={createTask}>
+          Create
+        </button>
       </div>
     </div>
   );
