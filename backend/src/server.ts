@@ -1,12 +1,12 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
 
-let tasks = [];
+let tasks: number[] = [];
 let nextTaskId = 1;
 
 app.get("/tasks", (req, res) => {
