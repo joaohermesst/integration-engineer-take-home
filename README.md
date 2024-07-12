@@ -50,3 +50,26 @@ Regards,
 The Duda Solutions Engineering Team
 
 ## Add any instructions to get your submission running below this line.
+
+### Environment Configuration
+
+To configure the backend environment, you will need to create the `backend/.env` file following the example `backend/.env.example`, to define required environment variables.
+
+To configure the frontend environment, you will need to create the `frontend/.env` file following the example `frontend/.env.example`, to define required environment variables.
+
+Make sure you install the dependencies running `yarn` in the root of the project.
+
+### Running development application
+
+With you environment set up made, you can run both backend and frontend in development mode using the command `yarn dev`.
+
+If you want to run only backend or frontend, you can run the `yarn dev` from the folder of the desired module, or you can run `yarn workspace backend dev` for the backend and `yarn workspace frontend dev` for the frontend.
+
+### Running application in production
+
+To run this code in production you should build backend and frontend.
+To achieve this, you can run `yarn build` from the root of the project.
+
+You can build just one part of the application using `yarn workspace backend build` or `yarn workspace frontend build`.
+
+To start the built app you can use the `yarn start` command in the root of the project. 
