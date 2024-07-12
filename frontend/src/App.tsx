@@ -42,6 +42,10 @@ const App: React.FC = () => {
   };
 
   const createTask = async () => {
+    if (!createFormData.title || !createFormData.description) {
+      alert("Please fill in all fields");
+      return;
+    }
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks`, {
       method: "POST",
       headers: {
@@ -54,6 +58,10 @@ const App: React.FC = () => {
   };
 
   const updateTask = async (id: number) => {
+    if (!updateFormData.title || !updateFormData.description) {
+      alert("Please fill in at least one field");
+      return;
+    }
     await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks/${id}`, {
       method: "PUT",
       headers: {
