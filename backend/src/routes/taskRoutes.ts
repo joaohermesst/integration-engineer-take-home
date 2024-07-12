@@ -4,11 +4,13 @@ import {
   createTask,
   deleteTask,
 } from "../controllers/taskController";
+import { validateData } from "../middlewares/validateDataMiddleware";
+import { createTaskSchema } from "../schemas/taskSchema";
 
 const router = express.Router();
 
 router.get("/", getTasks);
-router.post("/", createTask);
+router.post("/", validateData(createTaskSchema), createTask);
 router.delete("/:id", deleteTask);
 
 export default router;
